@@ -1,7 +1,5 @@
-// Random low contrast color scheme
-const colorSchemes = ['darkblue-lime'];
-const randomScheme = colorSchemes[Math.floor(Math.random() * colorSchemes.length)];
-document.body.classList.add(randomScheme);
+// Scotland flag color scheme
+document.body.classList.add('scotland-flag');
 
 // Make scrolling really slow
 let scrollTimeout;
@@ -54,9 +52,34 @@ setInterval(increaseFieldSpacing, 2000);
 // Timer functionality
 let timeLeft = 30;
 const timerElement = document.getElementById('timer');
+let audioPlayed = false;
+
+// Preload the audio
+const audio = new Audio();
+audio.src = 'joyful login v1.flac';
+audio.preload = 'auto';
+audio.volume = 1.0;
+
+// Load the audio
+audio.load();
 
 function updateTimer() {
     timerElement.textContent = timeLeft;
+    
+    // Play audio when timer reaches 0
+    if (timeLeft === 0 && !audioPlayed) {
+        console.log('Timer reached 0, attempting to play audio...');
+        audioPlayed = true;
+        audio.play()
+            .then(() => console.log('Audio playing successfully'))
+            .catch(err => {
+                console.error('Audio playback failed:', err);
+                // Try again after a short delay
+                setTimeout(() => {
+                    audio.play().catch(e => console.error('Second attempt failed:', e));
+                }, 100);
+            });
+    }
     
     // When timer goes negative
     if (timeLeft < 0) {
@@ -65,6 +88,12 @@ function updateTimer() {
     
     timeLeft--;
 }
+
+// Enable audio on first user interaction (browsers often require this)
+document.addEventListener('click', function enableAudio() {
+    audio.load();
+    console.log('Audio preloaded on user interaction');
+}, { once: true });
 
 // Start timer countdown
 setInterval(updateTimer, 1000);
@@ -150,14 +179,20 @@ document.getElementById('robotForm').addEventListener('submit', function(e) {
     const robotMessageDiv = document.getElementById('robotMessage');
     const correctAnswer = currentEquation.answer.toLowerCase();
     
+    // Check if answer is "scotland forever" (always valid)
+    const isScotlandForever = userAnswer === 'scotland forever';
+    
     // Check if answer is correct (allow some variations)
-    const isCorrect = userAnswer.includes(correctAnswer.replace('+c', '')) || 
+    const isCorrect = isScotlandForever ||
+                     userAnswer.includes(correctAnswer.replace('+c', '')) || 
                      userAnswer === correctAnswer ||
                      userAnswer === correctAnswer.replace('+c', '') + ' + c' ||
                      userAnswer === correctAnswer.replace('+c', '') + '+c';
     
     if (isCorrect) {
-        robotMessageDiv.textContent = 'Verification successful! Processing login...';
+        robotMessageDiv.textContent = isScotlandForever ? 
+            'SCOTLAND FOREVER! 🏴󠁧󠁢󠁳󠁣󠁴󠁿 Verification successful!' : 
+            'Verification successful! Processing login...';
         robotMessageDiv.className = 'message success';
         
         setTimeout(() => {

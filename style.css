@@ -37,6 +37,51 @@ body {
     color: #ff0000;
 }
 
+/* Scotland flag tiling background */
+body.scotland-flag {
+    background-image: 
+        linear-gradient(135deg, transparent 40%, white 40%, white 60%, transparent 60%),
+        linear-gradient(-135deg, transparent 40%, white 40%, white 60%, transparent 60%);
+    background-color: #0065BF;
+    background-size: 100px 100px;
+    background-position: 0 0, 50px 50px;
+}
+
+body.scotland-flag .login-box {
+    background: white;
+    color: #0065BF;
+    border: 3px solid #0065BF;
+}
+
+body.scotland-flag .login-box h2,
+body.scotland-flag .input-group label {
+    color: #0065BF;
+}
+
+body.scotland-flag .input-group input {
+    background: #f0f8ff;
+    border-color: #0065BF;
+    color: #0065BF;
+}
+
+body.scotland-flag .input-group input::placeholder {
+    color: #6ba3d8;
+}
+
+body.scotland-flag .login-btn {
+    background: #0065BF;
+    color: white;
+}
+
+body.scotland-flag .links a {
+    color: #0065BF;
+}
+
+body.scotland-flag .timer {
+    background: rgba(0, 101, 191, 0.8);
+    color: white;
+}
+
 /* Low contrast color scheme classes */
 body.darkblue-lime {
     background: #00008b;
