@@ -11,6 +11,123 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    transition: background 0.5s ease;
+}
+
+/* Timer styles */
+.timer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 48px;
+    font-weight: bold;
+    color: white;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 15px 30px;
+    border-radius: 10px;
+    z-index: 9999;
+    transition: color 0.3s;
+}
+
+.timer.negative {
+    color: #ff0000;
+}
+
+/* Shake animation - gets progressively worse */
+@keyframes shake-light {
+    0%, 100% { transform: translate(0, 0); }
+    25% { transform: translate(-2px, 2px); }
+    50% { transform: translate(2px, -2px); }
+    75% { transform: translate(-2px, -2px); }
+}
+
+@keyframes shake-medium {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    25% { transform: translate(-5px, 5px) rotate(-1deg); }
+    50% { transform: translate(5px, -5px) rotate(1deg); }
+    75% { transform: translate(-5px, -5px) rotate(-1deg); }
+}
+
+@keyframes shake-heavy {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    10% { transform: translate(-10px, 10px) rotate(-2deg); }
+    20% { transform: translate(10px, -10px) rotate(2deg); }
+    30% { transform: translate(-10px, -10px) rotate(-2deg); }
+    40% { transform: translate(10px, 10px) rotate(2deg); }
+    50% { transform: translate(-10px, 5px) rotate(-1deg); }
+    60% { transform: translate(10px, -5px) rotate(1deg); }
+    70% { transform: translate(-5px, -10px) rotate(-2deg); }
+    80% { transform: translate(5px, 10px) rotate(2deg); }
+    90% { transform: translate(-8px, -8px) rotate(-1deg); }
+}
+
+@keyframes shake-extreme {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    5% { transform: translate(-15px, 15px) rotate(-3deg); }
+    10% { transform: translate(15px, -15px) rotate(3deg); }
+    15% { transform: translate(-15px, -15px) rotate(-3deg); }
+    20% { transform: translate(15px, 15px) rotate(3deg); }
+    25% { transform: translate(-12px, 8px) rotate(-2deg); }
+    30% { transform: translate(12px, -8px) rotate(2deg); }
+    35% { transform: translate(-8px, -12px) rotate(-3deg); }
+    40% { transform: translate(8px, 12px) rotate(3deg); }
+    45% { transform: translate(-15px, 10px) rotate(-2deg); }
+    50% { transform: translate(15px, -10px) rotate(2deg); }
+    55% { transform: translate(-10px, -15px) rotate(-3deg); }
+    60% { transform: translate(10px, 15px) rotate(3deg); }
+    65% { transform: translate(-13px, 13px) rotate(-2deg); }
+    70% { transform: translate(13px, -13px) rotate(2deg); }
+    75% { transform: translate(-11px, -11px) rotate(-3deg); }
+    80% { transform: translate(11px, 11px) rotate(3deg); }
+    85% { transform: translate(-14px, 9px) rotate(-2deg); }
+    90% { transform: translate(14px, -9px) rotate(2deg); }
+    95% { transform: translate(-9px, -14px) rotate(-3deg); }
+}
+
+body.shake-light {
+    animation: shake-light 0.5s infinite;
+}
+
+body.shake-medium {
+    animation: shake-medium 0.3s infinite;
+}
+
+body.shake-heavy {
+    animation: shake-heavy 0.2s infinite;
+}
+
+body.shake-extreme {
+    animation: shake-extreme 0.15s infinite;
+}
+
+/* Low contrast color scheme classes */
+body.darkblue-lime {
+    background: #00008b;
+}
+
+body.darkblue-lime .login-box {
+    background: #00ff00;
+    color: #00008b;
+}
+
+body.darkblue-lime .login-box h2,
+body.darkblue-lime .input-group label {
+    color: #00008b;
+}
+
+body.darkblue-lime .input-group input {
+    background: #ccff99;
+    border-color: #00008b;
+    color: #00008b;
+}
+
+body.darkblue-lime .login-btn {
+    background: #00008b;
+    color: #00ff00;
+}
+
+body.darkblue-lime .links a {
+    color: #00008b;
 }
 
 .login-container {
@@ -19,6 +136,19 @@ body {
     justify-content: center;
     align-items: center;
     padding: 20px;
+    position: relative;
+}
+
+.sign-image {
+    position: absolute;
+    z-index: 1;
+    max-width: 400px;
+    width: 100%;
+    transition: transform 0.5s ease;
+}
+
+.sign-image.move-up {
+    transform: translateY(-20px);
 }
 
 .login-box {
@@ -28,6 +158,8 @@ body {
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
     width: 100%;
     max-width: 400px;
+    position: relative;
+    z-index: 2;
 }
 
 .login-box h2 {
@@ -123,4 +255,91 @@ body {
     color: #721c24;
     border: 1px solid #f5c6cb;
     display: block;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 30px 40px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: slideDown 0.3s;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-content h2 {
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.modal-content p {
+    color: #666;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.close {
+    color: #aaa;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close:hover,
+.close:focus {
+    color: #333;
+}
+
+/* Equation display styles */
+.equation {
+    background: #f5f5f5;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 24px;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    margin: 20px 0;
+    border: 2px solid #ddd;
+    color: #333;
 }

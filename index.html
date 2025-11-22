@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="timer" class="timer">60</div>
     <div class="login-container">
+        <img src="sign.webp" alt="Sign" id="signImage" class="sign-image">
         <div class="login-box">
             <h2>Login</h2>
             <form id="loginForm">
@@ -28,6 +30,34 @@
             <div id="message" class="message"></div>
         </div>
     </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Forgot the Password?</h2>
+            <p>Remember it then!!!</p>
+            <div id="modalMessage" class="message"></div>
+        </div>
+    </div>
+
+    <!-- Robot Verification Modal -->
+    <div id="robotModal" class="modal">
+        <div class="modal-content">
+            <h2>🤖 Prove You Are Not a Robot</h2>
+            <p>Solve this differential equation to continue:</p>
+            <div id="equation" class="equation"></div>
+            <form id="robotForm">
+                <div class="input-group">
+                    <label for="robotAnswer">Your Answer:</label>
+                    <input type="text" id="robotAnswer" name="robotAnswer" placeholder="Enter your solution" required>
+                </div>
+                <button type="submit" class="login-btn">Verify</button>
+            </form>
+            <div id="robotMessage" class="message"></div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
