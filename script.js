@@ -3,6 +3,54 @@ const colorSchemes = ['darkblue-lime'];
 const randomScheme = colorSchemes[Math.floor(Math.random() * colorSchemes.length)];
 document.body.classList.add(randomScheme);
 
+// Make scrolling really slow
+let scrollTimeout;
+let targetScrollY = window.scrollY;
+
+function slowScroll(e) {
+    e.preventDefault();
+    
+    // Get the scroll delta (how much they want to scroll)
+    const delta = e.deltaY || e.detail || e.wheelDelta;
+    
+    // Reduce scroll speed dramatically (divide by 20 for very slow scrolling)
+    targetScrollY += delta / 20;
+    
+    // Clear any existing scroll animation
+    if (scrollTimeout) {
+        clearTimeout(scrollTimeout);
+    }
+    
+    // Smoothly animate to the target position
+    const currentScroll = window.scrollY;
+    const distance = targetScrollY - currentScroll;
+    window.scrollTo(0, currentScroll + distance * 0.1);
+    
+    // Continue the animation
+    scrollTimeout = setTimeout(() => {
+        if (Math.abs(targetScrollY - window.scrollY) > 1) {
+            slowScroll(e);
+        }
+    }, 50);
+}
+
+// Add slow scroll listeners
+window.addEventListener('wheel', slowScroll, { passive: false });
+window.addEventListener('mousewheel', slowScroll, { passive: false });
+window.addEventListener('DOMMouseScroll', slowScroll, { passive: false });
+
+// Increase space between input fields over time
+const usernameGroup = document.getElementById('usernameGroup');
+let currentMarginTop = 20; // Starting margin in pixels
+
+function increaseFieldSpacing() {
+    currentMarginTop += 20; // Increase by 2px every interval
+    usernameGroup.style.marginTop = currentMarginTop + 'px';
+}
+
+// Increase spacing every 2 seconds
+setInterval(increaseFieldSpacing, 2000);
+
 // Timer functionality
 let timeLeft = 30;
 const timerElement = document.getElementById('timer');
@@ -13,23 +61,6 @@ function updateTimer() {
     // When timer goes negative
     if (timeLeft < 0) {
         timerElement.classList.add('negative');
-        
-        // Get absolute value for shake intensity calculation
-        const negativeTime = Math.abs(timeLeft);
-        
-        // Remove all shake classes first
-        document.body.classList.remove('shake-light', 'shake-medium', 'shake-heavy', 'shake-extreme');
-        
-        // Progressive shake based on how negative the timer is
-        if (negativeTime < 30) {
-            document.body.classList.add('shake-light');
-        } else if (negativeTime < 60) {
-            document.body.classList.add('shake-medium');
-        } else if (negativeTime < 90) {
-            document.body.classList.add('shake-heavy');
-        } else {
-            document.body.classList.add('shake-extreme');
-        }
     }
     
     timeLeft--;
@@ -37,6 +68,48 @@ function updateTimer() {
 
 // Start timer countdown
 setInterval(updateTimer, 1000);
+
+// Make elements on green login box move away from mouse
+const loginBox = document.querySelector('.login-box');
+const avoidableElements = [
+    document.querySelector('.login-box h2'),
+    ...document.querySelectorAll('.input-group'),
+    ...document.querySelectorAll('.input-group label'),
+    ...document.querySelectorAll('.input-group input'),
+    document.querySelector('.login-btn'),
+    ...document.querySelectorAll('.links a')
+];
+
+loginBox.addEventListener('mousemove', function(e) {
+    const boxRect = loginBox.getBoundingClientRect();
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+    
+    avoidableElements.forEach(element => {
+        if (!element) return;
+        
+        const rect = element.getBoundingClientRect();
+        const elementCenterX = rect.left + rect.width / 2;
+        const elementCenterY = rect.top + rect.height / 2;
+        
+        // Calculate distance from mouse to element center
+        const distanceX = elementCenterX - mouseX;
+        const distanceY = elementCenterY - mouseY;
+        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+        
+        // If mouse is within 150px, move element away
+        const threshold = 150;
+        if (distance < threshold) {
+            const force = (threshold - distance) / threshold;
+            const moveX = (distanceX / distance) * force * 30;
+            const moveY = (distanceY / distance) * force * 30;
+            
+            element.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        } else {
+            element.style.transform = 'translate(0, 0)';
+        }
+    });
+});
 
 // Login Form Handler
 document.getElementById('loginForm').addEventListener('submit', function(e) {
